@@ -1,0 +1,11 @@
+{
+  "name": "crystal-bracelet-configurator",
+  "version": "0.3.0",
+  "private": true,
+  "description": "水晶手链顾客定制与商家管理工具",
+  "scripts": {
+    "start": "node server.mjs",
+    "test": "node --test test-api.mjs test-admin.mjs",
+    "test:browser": "node tools/browser-smoke.mjs"
+  }
+}

@@ -1,0 +1,16 @@
+# Merchant data and generated uploads
+data/*.db
+data/*.db-*
+data/uploads/
+
+# Demo/reference images are not part of the generic product
+assets/beads/
+assets/incoming/
+references/
+
+# Local environment and logs
+.env
+*.log
+node_modules/
+.DS_Store
+Thumbs.db

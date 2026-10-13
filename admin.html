@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f6f7f5" />
+    <script>if (location.protocol === 'file:') location.replace('http://127.0.0.1:4181/admin.html')</script>
+    <title>手链定制 · 商家后台</title>
+    <link rel="stylesheet" href="./admin.css?v=9" />
+  </head>
+  <body>
+    <header class="admin-topbar">
+      <a class="admin-brand" href="/admin.html"><span>定</span><strong>手链定制 · 商家后台</strong></a>
+      <div class="topbar-actions"><a class="customer-link" href="/" target="_blank">查看顾客页面 ↗</a><button class="logout-button" id="logoutButton" type="button">退出</button></div>
+    </header>
+
+    <main class="admin-shell">
+      <aside class="admin-sidebar">
+        <p class="sidebar-label">管理</p>
+        <nav aria-label="后台栏目">
+          <button class="nav-button active" type="button" data-view="products">商品管理</button>
+          <button class="nav-button" type="button" data-view="designs">顾客方案 <span id="newCount">0</span></button>
+          <button class="nav-button" type="button" data-view="settings">店铺设置</button>
+        </nav>
+      </aside>
+
+      <section class="admin-content">
+        <section class="view active" data-view-panel="products">
+          <div class="page-heading">
+            <div><p>商品目录</p><h1>商品管理</h1></div>
+            <div class="heading-actions">
+              <button class="secondary-button" id="addMaterialButton" type="button">新增珠材</button>
+              <button class="icon-button" id="reloadCatalog" type="button" title="刷新商品" aria-label="刷新商品">↻</button>
+            </div>
+          </div>
+          <div class="segmented" id="productTypes" aria-label="商品类型">
+            <button class="active" type="button" data-kind="materials">珠材</button>
+            <button type="button" data-kind="accessories">配件</button>
+            <button type="button" data-kind="cords">绳色</button>
+            <button type="button" data-kind="inspirations">推荐内容</button>
+          </div>
+          <div class="accessory-category-bar" id="accessoryCategoryBar" hidden>
+            <div class="category-filter-list" id="accessoryCategoryFilters" aria-label="配件分类"></div>
+            <button class="secondary-button" id="manageAccessoryCategories" type="button">管理分类</button>
+          </div>
+          <div class="migration-notice" id="variantMigrationNotice" hidden><span>规格数据待核对：现有珠材的价格和库存已复制到 6 / 8 / 10 mm。请按实际商品逐项校准，无货的珠径可单独关闭；确认无误后再点击“我已检查”。</span><button id="confirmVariantMigration" type="button">我已检查</button></div>
+          <div class="table-wrap">
+            <div class="product-table" id="productTable"></div>
+          </div>
+        </section>
+
+        <section class="view" data-view-panel="designs">
+          <div class="page-heading">
+            <div><p>最近 100 条</p><h1>顾客方案</h1></div>
+            <button class="icon-button" id="reloadDesigns" type="button" title="刷新方案" aria-label="刷新方案">↻</button>
+          </div>
+          <div class="design-toolbar">
+            <label><span>搜索方案</span><input id="designSearch" type="search" placeholder="编号、顾客、联系方式或材料" /></label>
+            <label><span>处理状态</span><select id="statusFilter"><option value="all">全部状态</option><option value="new">待处理</option><option value="contacted">已联系</option><option value="confirmed">已确认</option><option value="completed">已完成</option><option value="cancelled">已取消</option></select></label>
+          </div>
+          <div class="design-list" id="designList"></div>
+        </section>
+
+        <section class="view" data-view-panel="settings">
+          <div class="page-heading"><div><p>展示与计价</p><h1>店铺设置</h1></div></div>
+          <div class="settings-stack">
+          <form class="settings-form" id="settingsForm">
+            <label><span>店铺名称</span><input id="brandName" maxlength="30" required /></label>
+            <label><span>商家联系方式</span><input id="merchantContact" maxlength="120" placeholder="例如：微信 crystal_shop" /></label>
+            <label><span>制作周期</span><input id="productionTime" maxlength="80" placeholder="例如：确认方案后 3-5 天发货" /></label>
+            <label><span>运费说明</span><input id="shippingNote" maxlength="120" placeholder="例如：满 199 元包邮" /></label>
+            <label><span>定制须知</span><textarea id="customNotice" maxlength="300" placeholder="例如：天然水晶存在纹理与色差，以实际成品为准。"></textarea></label>
+            <fieldset class="entry-image-settings">
+              <legend>首页入口图片</legend>
+              <div class="entry-image-grid">
+                <section class="entry-image-editor" data-entry-key="diy"><strong>自由搭配</strong><div class="entry-image-preview"><span>自动使用珠材图</span></div><div><button class="secondary-button choose-entry-image" type="button">上传图片</button><button class="secondary-button remove-entry-image" type="button">恢复自动</button></div><input class="entry-image-file" type="file" accept="image/png,image/jpeg,image/webp" hidden /></section>
+                <section class="entry-image-editor" data-entry-key="recommend"><strong>帮我推荐</strong><div class="entry-image-preview"><span>自动使用珠材图</span></div><div><button class="secondary-button choose-entry-image" type="button">上传图片</button><button class="secondary-button remove-entry-image" type="button">恢复自动</button></div><input class="entry-image-file" type="file" accept="image/png,image/jpeg,image/webp" hidden /></section>
+                <section class="entry-image-editor" data-entry-key="inspiration"><strong>从灵感开始</strong><div class="entry-image-preview"><span>自动使用珠材图</span></div><div><button class="secondary-button choose-entry-image" type="button">上传图片</button><button class="secondary-button remove-entry-image" type="button">恢复自动</button></div><input class="entry-image-file" type="file" accept="image/png,image/jpeg,image/webp" hidden /></section>
+              </div>
+            </fieldset>
+            <fieldset>
+              <legend>帮我推荐页面</legend>
+              <div class="recommendation-copy-settings">
+                <label><span>能量提问文案</span><input id="recommendationEnergyPrompt" maxlength="80" required placeholder="例如：你此刻更想靠近哪种状态？" /></label>
+                <label><span>五行提问文案</span><input id="recommendationElementPrompt" maxlength="80" required placeholder="例如：你想从哪个五行方向寻找搭配？" /></label>
+              </div>
+            </fieldset>
+            <fieldset>
+              <legend>基础手工费</legend>
+              <div class="price-grid">
+                <label><span>6 mm</span><input id="craft6" type="number" min="0" max="100000" step="1" required /></label>
+                <label><span>8 mm</span><input id="craft8" type="number" min="0" max="100000" step="1" required /></label>
+                <label><span>10 mm</span><input id="craft10" type="number" min="0" max="100000" step="1" required /></label>
+              </div>
+            </fieldset>
+            <fieldset class="filter-settings">
+              <legend>推荐选项</legend>
+              <p>停用后顾客端不再显示，但不会影响已经归类的商品。</p>
+              <div class="filter-setting-group">
+                <div class="filter-setting-heading"><strong>能量需求</strong><button class="secondary-button" id="addEnergyOption" type="button">新增</button></div>
+                <div class="filter-setting-list" id="energyOptionList"></div>
+              </div>
+              <div class="filter-setting-group">
+                <div class="filter-setting-heading"><strong>五行分类</strong><small>固定为金、木、水、火、土</small></div>
+                <div class="filter-setting-list" id="elementOptionList"></div>
+              </div>
+            </fieldset>
+            <fieldset class="material-facet-settings">
+              <legend>主珠分类方式</legend>
+              <p>颜色分类和五行分类由系统提供。这里可以新增珠材、产地、系列等分类方式，并为每种方式维护选项。</p>
+              <div class="fixed-facet-list"><span>颜色分类 <small>固定色块</small></span><span>五行分类 <small>使用上方五行选项</small></span></div>
+              <div class="material-facet-list" id="materialFacetList"></div>
+              <button class="secondary-button" id="addMaterialFacet" type="button">新增分类方式</button>
+            </fieldset>
+            <div class="form-actions"><button class="primary-button" type="submit">保存店铺设置</button></div>
+          </form>
+          <section class="backup-panel" aria-labelledby="backupTitle">
+            <div><p>数据管理</p><h2 id="backupTitle">备份与恢复</h2></div>
+            <p class="backup-copy">备份文件包含店铺设置、商品、上传图片和顾客方案。建议每次大量调整商品后导出一份。</p>
+            <div class="backup-actions">
+              <button class="secondary-button" id="exportBackup" type="button">导出备份</button>
+              <button class="secondary-button" id="chooseBackup" type="button">导入备份</button>
+              <input id="backupFile" type="file" accept="application/json,.json" hidden />
+            </div>
+            <small>导入会覆盖后台当前的全部数据，操作前会再次确认。</small>
+          </section>
+          <section class="backup-panel" aria-labelledby="passwordTitle">
+            <div><p>后台安全</p><h2 id="passwordTitle">修改登录密码</h2></div>
+            <form class="password-form" id="passwordForm">
+              <label><span>当前密码</span><input id="currentPassword" type="password" autocomplete="current-password" required /></label>
+              <label><span>新密码</span><input id="newPassword" type="password" minlength="8" maxlength="128" autocomplete="new-password" required /></label>
+              <label><span>再次输入新密码</span><input id="confirmNewPassword" type="password" minlength="8" maxlength="128" autocomplete="new-password" required /></label>
+              <div class="form-actions"><button class="secondary-button" type="submit">修改密码</button></div>
+            </form>
+          </section>
+          </div>
+        </section>
+      </section>
+    </main>
+    <dialog class="onboarding-dialog" id="onboardingDialog">
+      <div class="onboarding-heading">
+        <div><small>首次使用</small><h2>先把店铺配置好</h2></div>
+        <button id="closeOnboarding" type="button" aria-label="关闭">×</button>
+      </div>
+      <p class="onboarding-copy">完成下面三步，顾客页面就可以开始使用。</p>
+      <div class="onboarding-steps">
+        <button class="onboarding-step" type="button" data-onboarding-view="settings"><span>1</span><strong>设置店铺名称和手工费</strong><small>让顾客页面显示你的店铺信息</small></button>
+        <button class="onboarding-step" type="button" data-onboarding-material><span>2</span><strong>添加第一批珠材</strong><small>填写价格、色系并上传珠子图片</small></button>
+        <a class="onboarding-step" href="/" target="_blank"><span>3</span><strong>打开顾客定制页面</strong><small>确认顾客看到的商品和效果</small></a>
+      </div>
+      <div class="onboarding-actions"><label><input id="dontShowOnboarding" type="checkbox" /> 下次不再自动打开</label><button class="secondary-button" id="skipOnboarding" type="button">先跳过</button></div>
+    </dialog>
+    <dialog class="product-dialog" id="materialDialog">
+      <form id="materialForm">
+        <div class="dialog-heading"><div><small>商品管理</small><h2>新增珠材</h2></div><button id="closeMaterialDialog" type="button" aria-label="关闭">×</button></div>
+        <div class="dialog-fields">
+          <label><span>珠材名称</span><input id="newMaterialName" maxlength="40" required placeholder="例如：粉晶" /></label>
+          <label><span>简短说明</span><input id="newMaterialDescription" maxlength="120" placeholder="例如：通透清亮，适合日常搭配" /></label>
+          <fieldset class="new-variant-editor">
+            <legend>珠径规格</legend>
+            <div class="new-variant-head"><span>可售</span><span>珠径</span><span>单价（元）</span><span>库存（颗）</span></div>
+            <div class="new-variant-row"><input id="newMaterialActive6" type="checkbox" checked /><strong>6 mm</strong><input id="newMaterialPrice6" type="number" min="0" max="100000" step="1" value="0" required /><input id="newMaterialStock6" type="number" min="0" max="1000000" step="1" value="100" required /></div>
+            <div class="new-variant-row"><input id="newMaterialActive8" type="checkbox" checked /><strong>8 mm</strong><input id="newMaterialPrice8" type="number" min="0" max="100000" step="1" value="0" required /><input id="newMaterialStock8" type="number" min="0" max="1000000" step="1" value="100" required /></div>
+            <div class="new-variant-row"><input id="newMaterialActive10" type="checkbox" checked /><strong>10 mm</strong><input id="newMaterialPrice10" type="number" min="0" max="100000" step="1" value="0" required /><input id="newMaterialStock10" type="number" min="0" max="1000000" step="1" value="100" required /></div>
+          </fieldset>
+          <label><span>颜色分类</span><select id="newMaterialColor"><option value="white">月光白</option><option value="pink">柔雾粉</option><option value="purple">暮光紫</option><option value="blue">湖水蓝</option><option value="gray">月光灰</option><option value="black">曜石黑</option><option value="gold">暖金棕</option><option value="red">朱砂红</option></select></label>
+          <label><span>能量需求</span><select id="newMaterialEnergy"></select></label>
+          <label><span>五行归属</span><select id="newMaterialElement"></select></label>
+          <div class="new-material-facets" id="newMaterialFacetFields"></div>
+          <label><span>珠子图片</span><input id="newMaterialPhoto" type="file" accept="image/png,image/jpeg,image/webp" required /><small>支持 JPG、PNG、WebP，单张不超过 5 MB</small></label>
+          <div class="upload-preview" id="uploadPreview"><span>选择图片后可预览</span></div>
+          <label class="image-process-choice" id="newMaterialProcessChoice" hidden><span><input id="newMaterialAutoProcess" type="checkbox" checked /> 自动去背景并居中</span><small id="newMaterialProcessStatus"></small></label>
+        </div>
+        <div class="dialog-actions"><button class="secondary-button" id="cancelMaterialButton" type="button">取消</button><button class="primary-button" type="submit">添加珠材</button></div>
+      </form>
+    </dialog>
+    <dialog class="product-dialog" id="simpleProductDialog">
+      <form id="simpleProductForm">
+        <div class="dialog-heading"><div><small>商品管理</small><h2 id="simpleProductTitle">新增配件</h2></div><button id="closeSimpleProductDialog" type="button" aria-label="关闭">×</button></div>
+        <div class="dialog-fields simple-product-fields">
+          <label><span>名称</span><input id="newSimpleName" maxlength="40" required /></label>
+          <label id="newSimplePriceField"><span id="newSimplePriceLabel">单个价格（元）</span><input id="newSimplePrice" type="number" min="0" max="100000" step="1" value="0" required /></label>
+          <label><span id="newSimpleStockLabel">库存数量</span><input id="newSimpleStock" type="number" min="0" max="1000000" step="1" value="100" required /></label>
+          <label id="newSimpleDescriptionField"><span>简短说明</span><input id="newSimpleDescription" maxlength="60" placeholder="例如：银色配件" /></label>
+          <label id="newSimpleMaterialField" hidden><span>材料说明</span><input id="newSimpleMaterial" maxlength="160" placeholder="例如：8mm 白水晶、8mm 粉晶、银色隔片" /></label>
+          <label id="newSimpleAreaField" hidden><span>展示位置</span><select id="newSimpleArea"><option value="explore">帮我推荐</option><option value="inspiration">从灵感开始</option></select></label>
+          <label id="newSimpleEnergyField" hidden><span>能量需求</span><select id="newSimpleEnergy"></select></label>
+          <label id="newSimpleElementField" hidden><span>五行归属</span><select id="newSimpleElement"></select></label>
+          <label id="newSimpleCategoryField"><span>所属分类</span><select id="newSimpleCategory"></select></label>
+          <label id="newSimpleColorField" hidden><span>绳子颜色</span><input id="newSimpleColor" type="color" value="#737b7c" disabled /></label>
+        </div>
+        <div class="dialog-actions"><button class="secondary-button" id="cancelSimpleProduct" type="button">取消</button><button class="primary-button" type="submit">添加</button></div>
+      </form>
+    </dialog>
+    <dialog class="product-dialog" id="accessoryCategoryDialog">
+      <div class="category-dialog-body">
+        <div class="dialog-heading"><div><small>商品管理</small><h2>配件分类</h2></div><button id="closeAccessoryCategoryDialog" type="button" aria-label="关闭">×</button></div>
+        <p class="category-dialog-copy">新增吊坠、隔片、佛头等分类。分类中的商品仍按配件计价并占用一个珠位。</p>
+        <form class="category-create-form" id="accessoryCategoryForm">
+          <input id="newAccessoryCategoryName" maxlength="20" required placeholder="例如：吊坠" aria-label="新分类名称" />
+          <button class="primary-button" type="submit">新增分类</button>
+        </form>
+        <div class="category-manage-list" id="accessoryCategoryList"></div>
+        <div class="dialog-actions"><button class="primary-button" id="finishAccessoryCategories" type="button">完成</button></div>
+      </div>
+    </dialog>
+    <dialog class="product-dialog composition-dialog" id="compositionDialog">
+      <form id="compositionForm">
+        <div class="dialog-heading"><div><small>推荐搭配</small><h2 id="compositionTitle">配置实际用料</h2></div><button id="closeCompositionDialog" type="button" aria-label="关闭">×</button></div>
+        <p class="composition-copy">这些用料会显示给顾客，并可一键套用到手串。成品图与文字说明仍可单独保留。</p>
+        <div class="composition-settings">
+          <label><span>推荐珠径</span><select id="compositionBeadSize"><option value="6">6 mm</option><option value="8">8 mm</option><option value="10">10 mm</option></select></label>
+          <label><span>推荐绳子</span><select id="compositionCord"></select></label>
+        </div>
+        <div class="composition-heading"><strong>珠材与配件</strong><span id="compositionCount">0 / 30 位</span></div>
+        <div class="composition-rows" id="compositionRows"></div>
+        <button class="secondary-button composition-add" id="addCompositionItem" type="button">添加一种用料</button>
+        <div class="dialog-actions"><button class="secondary-button" id="cancelCompositionDialog" type="button">取消</button><button class="primary-button" type="submit">保存用料</button></div>
+      </form>
+    </dialog>
+    <dialog class="product-dialog photo-dialog" id="photoDialog">
+      <div class="photo-dialog-body">
+        <div class="dialog-heading"><div><small>珠材图片</small><h2 id="photoDialogTitle">管理图片</h2></div><button id="closePhotoDialog" type="button" aria-label="关闭">×</button></div>
+        <p class="photo-dialog-copy">第一张图片会作为商品封面，每种珠材最多 8 张。</p>
+        <div class="photo-grid" id="photoGrid"></div>
+        <section class="photo-process-panel" id="photoProcessPanel" hidden>
+          <div class="photo-process-heading"><strong>上传前预览</strong><span id="photoProcessStatus"></span></div>
+          <div class="photo-process-comparison">
+            <figure><div><img id="photoProcessOriginal" alt="原图预览" /></div><figcaption>原图</figcaption></figure>
+            <figure><div><img id="photoProcessResult" alt="自动处理预览" /></div><figcaption>处理后</figcaption></figure>
+          </div>
+          <label class="image-process-choice"><span><input id="photoAutoProcess" type="checkbox" checked /> 使用自动处理后的图片</span></label>
+          <div class="photo-process-actions"><button class="secondary-button" id="cancelPhotoProcess" type="button">取消</button><button class="primary-button" id="confirmPhotoProcess" type="button">确认上传</button></div>
+        </section>
+        <div class="dialog-actions"><button class="secondary-button" id="addPhotoButton" type="button">添加图片</button><button class="primary-button" id="finishPhotoButton" type="button">完成</button></div>
+        <input id="photoFile" type="file" accept="image/png,image/jpeg,image/webp" hidden />
+      </div>
+    </dialog>
+    <div class="toast" id="adminToast" role="status" aria-live="polite"></div>
+    <script src="./admin.js?v=11"></script>
+  </body>
+</html>

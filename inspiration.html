@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>if (location.protocol === 'file:') location.replace('http://127.0.0.1:4181/inspiration.html')</script>
+    <meta name="theme-color" content="#f4f6f3" />
+    <title>从灵感开始 · 手链定制</title>
+    <link rel="stylesheet" href="./portal.css?v=1" />
+  </head>
+  <body>
+    <header class="portal-header">
+      <a class="portal-brand" href="./">
+        <span class="portal-brand-mark" aria-hidden="true">定</span>
+        <span><strong data-brand-name>手链定制</strong><small>PERSONAL BRACELET STUDIO</small></span>
+      </a>
+      <a class="back-link" href="./">更换方式</a>
+    </header>
+    <main class="flow-main inspiration-main">
+      <header class="flow-heading">
+        <p>从灵感开始</p>
+        <h1>先看到喜欢的样子，再动手调整</h1>
+        <span>这里展示商家上传的成品实拍。打开一款即可查看材料，并套用为自己的起点。</span>
+      </header>
+      <section class="inspiration-gallery" id="inspirationGallery" aria-live="polite"></section>
+      <section class="empty-state" id="inspirationEmpty" hidden>
+        <strong>商家还没有上传灵感成品</strong>
+        <span>可以先从空手串自由搭配。</span>
+        <a class="primary-link" href="./diy.html">开始自由搭配</a>
+      </section>
+    </main>
+    <dialog class="inspiration-dialog" id="inspirationDialog">
+      <button class="dialog-close" id="closeInspiration" type="button" aria-label="关闭">×</button>
+      <div class="dialog-photo"><img id="inspirationDetailPhoto" alt="" /></div>
+      <div class="dialog-copy">
+        <p>商家成品</p>
+        <h2 id="inspirationDetailName"></h2>
+        <span id="inspirationDetailHint"></span>
+        <dl>
+          <div><dt>材料</dt><dd id="inspirationDetailMaterials"></dd></div>
+          <div><dt>规格</dt><dd id="inspirationDetailSpec"></dd></div>
+        </dl>
+        <button class="primary-button" id="useInspiration" type="button">用这款开始搭配</button>
+        <small class="dialog-warning" id="inspirationWarning"></small>
+      </div>
+    </dialog>
+    <script src="./portal.js?v=2"></script>
+    <script src="./inspiration.js?v=1"></script>
+  </body>
+</html>

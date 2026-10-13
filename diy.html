@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>if (location.protocol === 'file:') location.replace('http://127.0.0.1:4181/diy.html')</script>
+    <meta name="theme-color" content="#f7f8f6" />
+    <title>手链定制</title>
+    <link rel="stylesheet" href="./styles.css?v=28" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="./" aria-label="返回选择搭配方式">
+        <span class="brand-mark" aria-hidden="true">定</span>
+        <span>
+          <strong>手链定制</strong>
+          <small>PERSONAL BRACELET STUDIO</small>
+        </span>
+      </a>
+      <div class="save-state"><span class="status-dot"></span><span id="saveStatus">已自动保存</span></div>
+    </header>
+
+    <main class="workspace">
+      <section class="preview-pane" aria-labelledby="previewTitle">
+        <div class="preview-heading">
+          <div>
+            <p class="eyebrow">实时设计</p>
+            <h1 id="previewTitle">你的专属手链</h1>
+          </div>
+          <div class="preview-tools" aria-label="手串操作">
+            <button class="icon-button history-button" id="historyButton" type="button" title="历史搭配" aria-label="历史搭配">◷</button>
+            <button class="icon-button" id="resetButton" type="button" title="恢复原始状态" aria-label="恢复原始状态">↻</button>
+            <div class="selected-bead-tools" id="selectedBeadTools" hidden>
+              <button class="icon-button selected-bead-action" id="duplicateBeadButton" type="button" title="增加一颗所选珠子" aria-label="增加一颗所选珠子">+</button>
+              <button class="icon-button selected-bead-action delete-preview-button" id="deleteBeadButton" type="button" title="删除所选珠子" aria-label="删除所选珠子">−</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="bracelet-stage" id="braceletStage">
+          <div class="stage-shadow"></div>
+          <div class="bracelet" id="bracelet" aria-label="手链预览"></div>
+          <div class="center-inscription">
+            <span id="centerStyle">点击主珠开始搭配</span>
+            <strong id="centerSize">也可先新增一颗珠子</strong>
+          </div>
+        </div>
+
+        <div class="preview-size-controls" aria-label="尺寸设置">
+          <div class="preview-wrist-control">
+            <div class="compact-field-title"><label for="wristSize">手围</label><output id="wristOutput">16.0 cm</output></div>
+            <input id="wristSize" type="range" min="13" max="20" step="0.5" value="16" />
+          </div>
+          <div class="preview-diameter-control">
+            <span class="compact-label">珠径</span>
+            <div class="segmented compact-segmented" id="beadSizeOptions">
+              <button type="button" data-value="6">6 mm</button>
+              <button type="button" class="active" data-value="8">8 mm</button>
+              <button type="button" data-value="10">10 mm</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="preview-meta">
+          <div>
+            <span>手围</span>
+            <strong id="previewWrist">16.0 cm</strong>
+          </div>
+          <div>
+            <span>已用珠位</span>
+            <strong id="beadCount">0 / 20 颗</strong>
+          </div>
+          <div>
+            <span>基础手工费</span>
+            <strong id="totalPrice">¥ 51</strong>
+            <small class="price-note" id="totalPriceNote" hidden></small>
+          </div>
+        </div>
+
+        <div class="selection-bar">
+          <span>当前珠位</span>
+            <strong id="selectedPosition">— / 20</strong>
+            <div class="selection-actions">
+              <button class="quiet-button undo-button" id="undoButton" type="button" title="撤销上一步手串操作">撤销</button>
+              <button class="quiet-button" id="applyAllButton" type="button">整圈应用</button>
+          </div>
+        </div>
+        <p class="bead-edit-hint" id="beadEditHint">添加珠子后，可点击手串上的任意珠子进行调整</p>
+      </section>
+
+      <section class="control-pane" id="controlPane" aria-label="定制选项">
+        <div class="drawer-heading">
+          <button class="drawer-toggle" id="drawerToggleButton" type="button" aria-controls="drawerContent" aria-expanded="false">
+            <span class="drawer-handle" aria-hidden="true"></span>
+            <span><small id="drawerSectionEyebrow">自由搭配</small><strong id="drawerSectionName">主珠</strong></span>
+          </button>
+          <button class="drawer-close" id="drawerCloseButton" type="button" aria-label="收起选材与调整">×</button>
+        </div>
+        <div class="drawer-content" id="drawerContent">
+        <nav class="step-tabs" id="diyStepTabs" role="tablist" aria-label="自由搭配分类">
+          <button class="step-tab active" role="tab" aria-selected="true" aria-controls="panel-materials" type="button" data-step="materials">主珠</button>
+          <button class="step-tab" role="tab" aria-selected="false" aria-controls="panel-accessories" type="button" data-step="accessories">配件</button>
+          <button class="step-tab" role="tab" aria-selected="false" aria-controls="panel-cord" type="button" data-step="cord">绳子</button>
+          <button class="step-tab" role="tab" aria-selected="false" aria-controls="panel-note" type="button" data-step="note">备注</button>
+        </nav>
+
+        <div class="step-panel active" id="panel-materials" role="tabpanel" data-panel="materials">
+          <div class="field-group catalog-browser-group">
+            <div class="catalog-browser material-browser">
+              <aside class="catalog-sidebar" id="materialFacetTabs" aria-label="主珠分类方式"></aside>
+              <div class="catalog-products">
+                <div class="catalog-filter-options" id="materialFacetOptions" aria-label="主珠分类选项"></div>
+                <div class="catalog-product-heading"><span>选择主珠</span><small id="materialHint">点击任意珠材开始搭配</small></div>
+                <div class="material-grid" id="materialGrid"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <div class="field-title"><span>用料清单</span><small id="inventoryCount">3 种材料</small></div>
+            <div class="material-list" id="materialList"></div>
+          </div>
+        </div>
+
+        <div class="step-panel" id="panel-accessories" role="tabpanel" data-panel="accessories">
+          <div class="field-group catalog-browser-group">
+            <div class="catalog-browser">
+              <aside class="catalog-sidebar accessory-category-options" id="accessoryCategoryOptions" aria-label="配件分类"></aside>
+              <div class="catalog-products">
+                <div class="catalog-product-heading"><span>选择配件</span><small id="accessoryHint">点击可连续添加并占用珠位</small></div>
+                <div class="accessory-options" id="accessoryOptions"></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="step-panel" id="panel-cord" role="tabpanel" data-panel="cord">
+          <div class="field-group catalog-browser-group">
+            <div class="catalog-browser">
+              <aside class="catalog-sidebar" aria-label="绳子分类">
+                <button class="active" type="button" aria-current="true">绳色</button>
+              </aside>
+              <div class="catalog-products">
+                <div class="catalog-product-heading"><span>选择绳色</span><small>按商家在售绳材选择</small></div>
+                <div class="cord-options" id="cordOptions"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="step-panel" id="panel-note" role="tabpanel" data-panel="note">
+          <div class="field-group">
+            <div class="field-title"><label for="noteInput">给手作师的话</label><small><span id="noteCount">0</span>/80</small></div>
+            <textarea id="noteInput" maxlength="80" placeholder="例如：希望粉色少一点，整体更适合通勤。"></textarea>
+            <div class="reference-upload">
+              <div class="reference-upload-heading">
+                <div><strong>参考图片</strong><small>可选 · JPG、PNG、WebP · 不超过 5 MB</small></div>
+                <button class="quiet-button" id="referenceImageButton" type="button">选择图片</button>
+              </div>
+              <input id="referenceImageInput" type="file" accept="image/png,image/jpeg,image/webp" hidden />
+              <div class="reference-preview" id="referenceImagePreview" hidden>
+                <img id="referenceImagePreviewImage" alt="顾客参考图片预览" />
+                <button id="removeReferenceImageButton" type="button" title="删除参考图片" aria-label="删除参考图片">×</button>
+              </div>
+            </div>
+            <section class="merchant-service-info" id="merchantServiceInfo" hidden>
+              <h3>商家服务说明</h3>
+              <dl>
+                <div id="previewMerchantContactRow"><dt>联系方式</dt><dd id="previewMerchantContact"></dd></div>
+                <div id="previewProductionTimeRow"><dt>制作时间</dt><dd id="previewProductionTime"></dd></div>
+                <div id="previewShippingNoteRow"><dt>发货说明</dt><dd id="previewShippingNote"></dd></div>
+                <div id="previewCustomNoticeRow"><dt>定制须知</dt><dd id="previewCustomNotice"></dd></div>
+              </dl>
+            </section>
+          </div>
+
+        </div>
+        </div>
+
+        <footer class="action-footer">
+          <div><span>基础手工费</span><strong id="footerPrice">¥ 51</strong><small class="price-note" id="footerPriceNote" hidden></small></div>
+          <button class="primary-button" id="generateButton" type="button">保存方案</button>
+        </footer>
+      </section>
+    </main>
+
+    <button class="drawer-backdrop" id="drawerBackdrop" type="button" aria-label="收起选材与调整" tabindex="-1"></button>
+    <footer class="mobile-action-footer" aria-label="方案操作">
+      <div><span>基础手工费</span><strong id="mobileFooterPrice">¥ 51</strong><small class="price-note" id="mobileFooterPriceNote" hidden></small></div>
+      <button class="primary-button" id="mobileGenerateButton" type="button">保存方案</button>
+    </footer>
+
+    <dialog id="resultDialog" class="result-dialog">
+      <form method="dialog">
+        <button class="dialog-close" value="cancel" aria-label="关闭">×</button>
+      </form>
+      <div class="result-check">✓</div>
+      <p class="eyebrow">方案已保存</p>
+      <h2>这条手链已经有名字了</h2>
+      <p class="result-type" id="resultType"></p>
+      <div class="design-code" id="designCode">PG-000000-0000</div>
+      <canvas id="exportCanvas" width="720" height="720"></canvas>
+      <dl id="resultSummary"></dl>
+      <p class="production-estimate-note">珠位和价格为预估，实际松紧、配件宽度与最终颗数由商家确认。</p>
+      <section class="merchant-result-info" id="merchantResultInfo" hidden>
+        <h3>商家说明</h3>
+        <dl>
+          <div id="merchantContactRow"><dt>联系方式</dt><dd id="resultMerchantContact"></dd></div>
+          <div id="productionTimeRow"><dt>制作时间</dt><dd id="resultProductionTime"></dd></div>
+          <div id="shippingNoteRow"><dt>发货说明</dt><dd id="resultShippingNote"></dd></div>
+          <div id="customNoticeRow"><dt>定制须知</dt><dd id="resultCustomNotice"></dd></div>
+        </dl>
+      </section>
+      <div class="dialog-actions">
+        <button class="quiet-button" id="downloadButton" type="button">保存方案图</button>
+        <button class="primary-button" id="copyButton" type="button">复制给商家</button>
+        <button class="primary-button submit-merchant-button" id="submitMerchantButton" type="button">提交给商家</button>
+      </div>
+    </dialog>
+
+    <dialog id="shortageDialog" class="warning-dialog">
+      <form method="dialog">
+        <button class="dialog-close" value="cancel" aria-label="关闭">×</button>
+      </form>
+      <div class="warning-mark">!</div>
+      <p class="eyebrow">珠位尚未填满</p>
+      <h2>当前所选珠子不够</h2>
+      <p id="shortageMessage" class="warning-copy"></p>
+      <div class="dialog-actions">
+        <button class="quiet-button" id="continueEditingButton" type="button">返回继续搭配</button>
+        <button class="primary-button" id="confirmIncompleteButton" type="button">保存灵感方案</button>
+      </div>
+    </dialog>
+
+    <dialog id="materialDetailDialog" class="material-detail-dialog">
+      <div class="material-detail-heading">
+        <div><p class="eyebrow">珠材详情</p><h2 id="materialDetailName"></h2></div>
+        <button class="dialog-close" id="closeMaterialDetailDialog" type="button" aria-label="关闭">×</button>
+      </div>
+      <div class="material-detail-gallery" id="materialDetailGallery"></div>
+      <p class="material-detail-description" id="materialDetailDescription"></p>
+      <div class="material-detail-tags" id="materialDetailTags"></div>
+      <p class="material-detail-suggestion" id="materialDetailSuggestion"></p>
+      <div class="material-detail-variants" id="materialDetailVariants"></div>
+    </dialog>
+
+    <dialog id="submissionDialog" class="warning-dialog submission-dialog">
+      <form id="submissionForm">
+        <button class="dialog-close" id="closeSubmissionDialog" type="button" aria-label="关闭">×</button>
+        <p class="eyebrow">提交给商家</p>
+        <h2>留下最少联系信息</h2>
+        <p class="warning-copy">只有确认提交后，商家后台才会收到这份方案。这里不支付，也不会自动扣库存。</p>
+        <p class="production-estimate-note">珠位和价格为预估，实际松紧、配件宽度与最终颗数由商家确认。</p>
+        <div class="submission-fields">
+          <label><span>称呼</span><input id="customerName" maxlength="40" required placeholder="例如：小林" /></label>
+          <label><span>联系方式</span><input id="customerContact" maxlength="120" required placeholder="微信、手机号或其他联系方式" /></label>
+          <label><span>数量</span><input id="customerQuantity" type="number" min="1" max="999" step="1" value="1" required /></label>
+        </div>
+        <div class="dialog-actions"><button class="quiet-button" id="cancelSubmission" type="button">取消</button><button class="primary-button" type="submit">确认提交</button></div>
+      </form>
+    </dialog>
+
+    <dialog id="historyDialog" class="history-dialog">
+      <form method="dialog">
+        <button class="dialog-close" value="cancel" aria-label="关闭">×</button>
+      </form>
+      <p class="eyebrow">自动保存</p>
+      <h2>历史搭配</h2>
+      <p class="history-copy">打开旧搭配后可以继续调整，实际修改后才会另存为新搭配。</p>
+      <div class="history-list" id="historyList"></div>
+    </dialog>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="./app.js?v=39"></script>
+  </body>
+</html>

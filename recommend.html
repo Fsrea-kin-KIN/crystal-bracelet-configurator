@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>if (location.protocol === 'file:') location.replace('http://127.0.0.1:4181/recommend.html')</script>
+    <meta name="theme-color" content="#f4f6f3" />
+    <title>帮我推荐 · 手链定制</title>
+    <link rel="stylesheet" href="./portal.css?v=3" />
+  </head>
+  <body>
+    <header class="portal-header">
+      <a class="portal-brand" href="./">
+        <span class="portal-brand-mark" aria-hidden="true">定</span>
+        <span><strong data-brand-name>手链定制</strong><small>PERSONAL BRACELET STUDIO</small></span>
+      </a>
+      <a class="back-link" href="./">更换方式</a>
+    </header>
+    <main class="flow-main">
+      <header class="flow-heading">
+        <p>帮我推荐</p>
+        <h1>先从你在意的方向开始</h1>
+        <span>选择你在意的方向，查看商家为你准备的成品搭配。这里只提供搭配灵感，不作功效承诺。</span>
+      </header>
+      <section class="recommend-shell" aria-live="polite">
+        <aside class="recommend-modes" role="tablist" aria-label="推荐方式">
+          <button class="active" type="button" role="tab" aria-selected="true" data-mode="energy">找到你的能量</button>
+          <button type="button" role="tab" aria-selected="false" data-mode="element">五行灵感</button>
+        </aside>
+        <div class="recommend-content">
+          <div class="recommend-prompt" id="recommendPrompt"></div>
+          <div class="recommend-options" id="recommendOptions"></div>
+          <div class="recommend-results" id="recommendResults">
+            <div class="recipe-grid" id="recipeResults"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script src="./portal.js?v=2"></script>
+    <script src="./recommend.js?v=3"></script>
+  </body>
+</html>

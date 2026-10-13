@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f3f5f2" />
+    <title>手链定制 · 商家后台登录</title>
+    <link rel="stylesheet" href="./admin-login.css" />
+  </head>
+  <body>
+    <main class="login-shell">
+      <section class="login-panel">
+        <a class="login-brand" href="/"><span>定</span><strong>手链定制</strong></a>
+        <div class="login-heading"><p id="loginEyebrow">商家后台</p><h1 id="loginTitle">登录后台</h1><span id="loginCopy">请输入后台密码继续管理商品和顾客方案。</span></div>
+        <form id="loginForm">
+          <label><span id="passwordLabel">后台密码</span><input id="password" type="password" minlength="8" maxlength="128" autocomplete="current-password" required autofocus /></label>
+          <label id="confirmField" hidden><span>再次输入密码</span><input id="confirmPassword" type="password" minlength="8" maxlength="128" autocomplete="new-password" disabled /></label>
+          <label class="remember-login"><input id="rememberLogin" type="checkbox" checked /><span>保持登录 30 天</span></label>
+          <p class="login-error" id="loginError" role="alert"></p>
+          <button type="submit" id="loginButton">进入后台</button>
+        </form>
+        <p class="login-note">请勿在公共电脑上勾选“保持登录”。密码不会被本工具明文保存。</p>
+        <p class="reset-note">忘记密码时，请在工具文件夹双击“重置商家后台密码”。</p>
+        <a class="customer-entry" href="/">返回顾客定制页面</a>
+      </section>
+    </main>
+    <script src="./admin-login.js?v=2"></script>
+  </body>
+</html>
